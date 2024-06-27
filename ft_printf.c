@@ -6,11 +6,11 @@
 /*   By: niarygin <niarygin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 13:15:36 by niarygin          #+#    #+#             */
-/*   Updated: 2024/06/25 10:48:43 by niarygin         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:45:07 by niarygin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "ft_printf.h"
 
 //The function implements the following conversions:
 // %c Prints a single character.
@@ -28,33 +28,35 @@
 //and the field minimum width under all conversions.
 //(and/or) Manage all the following flags: ’# +’.
 
-int	ft_printf(const char *format, ...)
+int print_format(va_list arg_ptr, const char *format, unsigned int i)
+{	
+	if (format[i] == 'c')
+		return(print_char(va_arg(arg_ptr, int)));
+	else
+		return (-1);
+}
+
+int	ft_printf(const char *format_str, ...)
 {
-	char	cval;
-	int		i;
-	int		count;
+	unsigned int	i;
+	unsigned int	count;
+	va_list			arg_ptr;
 	
-	va_list	arg_ptr;
-	va_start(arg_ptr, format);
+	va_start(arg_ptr, format_str);
 	i = 0;
 	count = 0;
-	while (format[i])
+	while (format_str[i])
 	{
-		if (format[i] != '%')
+		if (format_str[i] != '%')
 		{
-			ft_putchar_fd(format[i], 1);
-			i++;
-			count++;
-			continue;
+			count += print_char(format_str[i]);
 		}
-		i++;
-		if (format[i] == 'c')
+		else if (format_str[i] == '%' && ft_strchr("cspdiuxX%", format_str[i + 1]))
 		{
-			cval = va_arg(arg_ptr, int);
-			ft_putchar_fd(cval, 1);
-			count++;
+			count += print_format(arg_ptr, format_str, i + 1);
 			i++;
 		}
+		i++;	
 	}
 	va_end(arg_ptr);
 	return (count);
