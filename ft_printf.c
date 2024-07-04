@@ -6,7 +6,7 @@
 /*   By: niarygin <niarygin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 13:15:36 by niarygin          #+#    #+#             */
-/*   Updated: 2024/06/27 10:45:07 by niarygin         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:00:23 by niarygin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@
 //and the field minimum width under all conversions.
 //(and/or) Manage all the following flags: ’# +’.
 
-int print_format(va_list arg_ptr, const char *format, unsigned int i)
+static int	print_format(va_list arg_ptr, const char *format, unsigned int i)
 {	
 	if (format[i] == 'c')
 		return(print_char(va_arg(arg_ptr, int)));
+	else if (format[i] == 's')
+		return(print_string(va_arg(arg_ptr, char *)));
 	else
 		return (-1);
 }

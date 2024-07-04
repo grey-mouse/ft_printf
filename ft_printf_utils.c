@@ -6,7 +6,7 @@
 /*   By: niarygin <niarygin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 09:59:03 by niarygin          #+#    #+#             */
-/*   Updated: 2024/06/27 10:43:55 by niarygin         ###   ########.fr       */
+/*   Updated: 2024/07/04 13:44:56 by niarygin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,16 @@ char	*ft_strchr(const char *s, int c)
 		i++;
 	}
 	return ((char *)(s + i));
+}
+int	print_string(char *s)
+{
+	unsigned int	i;
+	
+	i = 0;
+	while (s[i])
+	{
+		print_char(s[i]);
+		i++;
+	}
+	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: niarygin <niarygin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 08:59:17 by niarygin          #+#    #+#             */
-/*   Updated: 2024/06/27 10:46:18 by niarygin         ###   ########.fr       */
+/*   Updated: 2024/07/04 13:45:12 by niarygin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@ int		ft_printf(const char *format, ...);
 void	ft_putchar_fd(char c, int fd);
 char	*ft_strchr(const char *s, int c);
 int		print_char(char c);
+int		print_string(char *s);
 
 #endif
