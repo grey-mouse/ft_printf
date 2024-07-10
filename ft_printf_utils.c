@@ -6,21 +6,15 @@
 /*   By: niarygin <niarygin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 09:59:03 by niarygin          #+#    #+#             */
-/*   Updated: 2024/07/04 13:44:56 by niarygin         ###   ########.fr       */
+/*   Updated: 2024/07/10 15:22:14 by niarygin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_putchar_fd(char c, int fd)
+void	print_char(char c)
 {
-	write(fd, &c, 1);
-}
-
-int	print_char(char c)
-{
-	ft_putchar_fd(c, 1);
-	return (1);
+	write(1, &c, 1);
 }
 char	*ft_strchr(const char *s, int c)
 {
@@ -35,7 +29,28 @@ char	*ft_strchr(const char *s, int c)
 	}
 	return ((char *)(s + i));
 }
-int	print_string(char *s)
+void	print_fmt_char(t_format *fmt, va_list args)
+{
+	const char	c = va_arg(args, int);
+
+	if (fmt->width > 0)
+		fmt->offset = fmt->width - 1;
+	fmt->len += fmt->offset + 1;
+	if (fmt->minus)
+	{
+		print_char(c);
+		while (fmt->offset--)
+			print_char(' ');
+	}
+	else
+	{
+		while (fmt->offset--)
+			print_char(' ');
+		print_char(c);
+	}
+}
+
+/*int	print_string(char *s)
 {
 	unsigned int	i;
 	
@@ -47,3 +62,9 @@ int	print_string(char *s)
 	}
 	return (i);
 }
+
+int	print_addr(void *p)
+{
+	(void)p;
+	return (1);
+}*/

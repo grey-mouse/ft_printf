@@ -6,7 +6,7 @@
 /*   By: niarygin <niarygin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 13:15:36 by niarygin          #+#    #+#             */
-/*   Updated: 2024/07/04 14:00:23 by niarygin         ###   ########.fr       */
+/*   Updated: 2024/07/10 14:45:00 by niarygin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,38 +28,97 @@
 //and the field minimum width under all conversions.
 //(and/or) Manage all the following flags: ’# +’.
 
-static int	print_format(va_list arg_ptr, const char *format, unsigned int i)
-{	
-	if (format[i] == 'c')
-		return(print_char(va_arg(arg_ptr, int)));
-	else if (format[i] == 's')
-		return(print_string(va_arg(arg_ptr, char *)));
-	else
-		return (-1);
+/*
+			len; -length of the printed word
+			offset; -
+			pad; - 
+			width; - width parameter, e.g. width=25 in printf("%25s", str);
+			precision; - for int the minimum num of symbols to print, result isn't truncated, 
+			adds leading zeroes
+			hashtag; - used with x, X, the value is preceded with 0x, 0X
+			zero; - left-pads number with zeroes instead of spaces where width specified
+			minus; - left-justify within the given width
+			space; -if no sign then space is inserted before the value
+			plus; - forces to precede result with + or - for numbers
+			dot; - is there . or not
+			upper; - x or X
+*/
+
+static void format_init(t_format *fmt)
+{
+	fmt->minus = false;
+	fmt->zero = false;
+	fmt->dot = false;
+	fmt->precision = 0;
+	fmt->hashtag = false;
+	fmt->space = false;
+	fmt->plus = false;
+	fmt->width = 0;
+	fmt->offset = 0;
+	//fmt->pad_ = 0;
+	//fmt->upper_ = 0;
 }
 
-int	ft_printf(const char *format_str, ...)
+static void	set_format_values(char c, t_format *fmt)
 {
-	unsigned int	i;
-	unsigned int	count;
-	va_list			arg_ptr;
-	
-	va_start(arg_ptr, format_str);
-	i = 0;
-	count = 0;
-	while (format_str[i])
+	if (c >= '0' && c <= '9')
 	{
-		if (format_str[i] != '%')
+		if (fmt->dot || fmt->zero)
+			fmt->precision = fmt->precision * 10 + c - '0';
+		else
 		{
-			count += print_char(format_str[i]);
+			if (!fmt->width && c == '0')
+				fmt->zero = true;
+			else
+				fmt->width = fmt->width * 10 + c - '0';
 		}
-		else if (format_str[i] == '%' && ft_strchr("cspdiuxX%", format_str[i + 1]))
-		{
-			count += print_format(arg_ptr, format_str, i + 1);
-			i++;
-		}
-		i++;	
 	}
-	va_end(arg_ptr);
+	else if (c == '-')
+		fmt->minus = true;
+	else if (c == '.')
+		fmt->dot = true;
+	else if (c == '#')
+		fmt->hashtag = true;
+	else if (c == ' ')
+		fmt->space = true;
+	else if (c == '+')
+		fmt->plus = true;
+}
+
+static const char	*print_format(const char *f_string, t_format *fmt, va_list args)
+{	
+	while (*f_string && !ft_strchr("cspdiuxX%", *f_string))
+		set_format_values(*f_string++, fmt);
+	if (*f_string == 'c')
+		print_fmt_char(fmt, args);
+	/*else if (*f_string == 's')
+		return (print_string(va_arg(arg_ptr, char *)));
+	else if (*f_string == 'p')
+		return (print_addr(va_arg(arg_ptr, void *)));*/
+	return (++f_string);
+}
+
+int	ft_printf(const char *f_string, ...)
+{
+	int			count;
+	t_format	fmt;
+	va_list		args;
+
+	count = 0;
+	fmt.len = 0;
+	format_init(&fmt);
+	va_start(args, f_string);
+	while (*f_string)
+	{
+		if (*f_string == '%' && *f_string++)
+		{
+			f_string = print_format(f_string, &fmt, args);
+			format_init(&fmt);
+		}
+		else if (++count)
+			print_char(*f_string++);
+	}
+	va_end(args);
+	count += fmt.len;
 	return (count);
 }

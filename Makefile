@@ -15,6 +15,8 @@ $(NAME): $(OBJS)
 
 all: $(NAME)
 
+bonus: $(NAME)
+
 clean:
 	rm -rf $(OBJS)
 
@@ -23,4 +25,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all bonus clean fclean re
