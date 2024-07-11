@@ -6,7 +6,7 @@
 /*   By: niarygin <niarygin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 13:15:36 by niarygin          #+#    #+#             */
-/*   Updated: 2024/07/10 14:45:00 by niarygin         ###   ########.fr       */
+/*   Updated: 2024/07/11 12:25:59 by niarygin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ static void format_init(t_format *fmt)
 	fmt->plus = false;
 	fmt->width = 0;
 	fmt->offset = 0;
-	//fmt->pad_ = 0;
-	//fmt->upper_ = 0;
 }
 
 static void	set_format_values(char c, t_format *fmt)
@@ -91,9 +89,9 @@ static const char	*print_format(const char *f_string, t_format *fmt, va_list arg
 		set_format_values(*f_string++, fmt);
 	if (*f_string == 'c')
 		print_fmt_char(fmt, args);
-	/*else if (*f_string == 's')
-		return (print_string(va_arg(arg_ptr, char *)));
-	else if (*f_string == 'p')
+	else if (*f_string == 's')
+		print_fmt_string(fmt, args);
+	/*else if (*f_string == 'p')
 		return (print_addr(va_arg(arg_ptr, void *)));*/
 	return (++f_string);
 }
